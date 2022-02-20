@@ -1,3 +1,3 @@
 # coa-project
 
-Instruction Format : <label> ~ <opcode> <operand> ; <comment>
+Instruction Format : '''<label> ~ <opcode> <operand> ; <comment>'''
