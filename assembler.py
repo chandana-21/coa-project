@@ -3,7 +3,7 @@ lab_table = {} # stores Label addresses { label : location_address }
 var_table = {} # stores variables in format { variable : [value, location_address, size] }
 lit_table = {} # stores literals in format { literal : address}
 
-keywords = ['CLA','LAC','SAC','ADD','SUB','BRZ','BRN', 'BRP','INP', 'DSP', 'MUL', 'DIV', 'STP', 'DW']
+keywords = ['CLA','LAC','SAC','ADD','SUB','BRZ','BRN', 'BRP','INP', 'DSP', 'MUL', 'DIV', 'STP', 'DEC']
 
 code = []
 pass_one_code = []
@@ -38,55 +38,75 @@ def duplicate_variable(label):
 
 def add_label(label, location_counter):
     if duplicate_label(label):
-        return 0
+        return 0 #error
     elif duplicate_variable(label):
-        return 1
+        return 1 #error
     elif label in keywords :
-        return 2
+        return 2 #error
     else:
         lab_table[label] = location_counter
         return 3
 
-def add_opcode()
+def add_opcode(opcode, bin_opcode):
+    if list(opc_table.keys()).count(opcode)==0:
+        opc_table[opcode] = [bin_opcode]
+
+def get_variable(line):
+    value = 0
+    size = 12
+    parts = line.upper().split()
+    i = parts.count("DEC")
+    if i==0:
+        return None, None, None
+    elif i>1 or len(parts)>3:
+        return 0,0,0 #error
+    variable = parts[0].strip()
+    if variable.isdigit():
+        return 0,0,0 #error
+    if len(parts)==3:
+        value = parts[2].strip()
+        if not value.isdigit():
+            return 0,0,0 #error
+    value = int(value)
+    return variable, value, size   
 
 def get_opcode(line):
     opcodes = line.upper().split()
 
-    if opcodes.count('CLA') + opcodes.count('LAC') + opcodes.count('SAC') + opcodes.count('ADD') + opcodes.count('SUB') + opcodes.count('BRZ') + opcodes.count('BRN') + opcodes.count('BRP') + opcodes.count('INP') + opcodes.count('DSP') + opcodes.count('MUL') + opcodes.count('DIV') + opcodes.count('STP') + opcodes.count('DW') > 1:
-        return 0 # error declare opcodes only once
+    if opcodes.count('CLA') + opcodes.count('LAC') + opcodes.count('SAC') + opcodes.count('ADD') + opcodes.count('SUB') + opcodes.count('BRZ') + opcodes.count('BRN') + opcodes.count('BRP') + opcodes.count('INP') + opcodes.count('DSP') + opcodes.count('MUL') + opcodes.count('DIV') + opcodes.count('STP') + opcodes.count('DEC') > 1:
+        return 0 # error! declare opcodes only once
 
     if opcodes.count('CLA') == 1:
-        add_opcode('CLA' )
+        add_opcode('CLA',"0000" )
     elif opcodes.count('LAC') == 1:
-        add_opcode('LAC' )
+        add_opcode('LAC', "0001")
     elif opcodes.count('SAC') == 1:
-        add_opcode('SAC')
+        add_opcode('SAC', "0010")
     elif opcodes.count('ADD') == 1:
-        add_opcode('ADD')
+        add_opcode('ADD', "0011")
     elif opcodes.count('SUB') == 1:
-        add_opcode('SUB' )
+        add_opcode('SUB', "0100")
     elif opcodes.count('BRZ') == 1:
-        add_opcode('BRZ' )
+        add_opcode('BRZ', "0101")
     elif opcodes.count('BRN') == 1:
-        add_opcode('BRN' )
+        add_opcode('BRN', "0110")
     elif opcodes.count('BRP') == 1:
-        add_opcode('BRP' )
+        add_opcode('BRP', "0111")
     elif opcodes.count('INP') == 1:
-        add_opcode('INP' )
+        add_opcode('INP', "1000")
     elif opcodes.count('DSP') == 1:
-        add_opcode('DSP' )
+        add_opcode('DSP', "1001")
     elif opcodes.count('MUL') == 1:
-        add_opcode('MUL' )
+        add_opcode('MUL', "1010")
     elif opcodes.count('DIV') == 1:
-        add_opcode('DIV' )
+        add_opcode('DIV', "1011")
     elif opcodes.count('STP') == 1:
-        add_opcode('STP')
+        add_opcode('STP',"1100")
     else:
-        pass
-    
-    
-    
-    
+        variable, value, size = get_variable(line)
+        if variable==0 and value==0 and size==0:
+            return "error"
+        # To be continued 
 
 def pass_one():
     location_counter = 0;
@@ -144,16 +164,3 @@ def pass_one():
 # OPC_TABLE["MUL"] = ["1010",1]
 # OPC_TABLE["DIV"] = ["1011",1]
 # OPC_TABLE["STP"] = ["1100",0]
-# OPC_TABLE["CLA"] = ["0000" ]
-# OPC_TABLE["LA"] = ["0001" ]
-# OPC_TABLE["SAC"] = ["0010" ]
-# OPC_TABLE["ADD"] = ["0011" ]
-# OPC_TABLE["SUB"] = ["0100" ]
-# OPC_TABLE["BRZ"] = ["0101" ]
-# OPC_TABLE["BRN"] = ["0110" ]
-# OPC_TABLE["BRP"] = ["0111" ]
-# OPC_TABLE["INP"] = ["1000" ]
-# OPC_TABLE["DSP"] = ["1001" ]
-# OPC_TABLE["MUL"] = ["1010" ]
-# OPC_TABLE["DIV"] = ["1011" ]
-# OPC_TABLE["STP"] = ["1100" ]
