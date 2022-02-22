@@ -6,20 +6,20 @@ lit_table = {} # stores literals like { literal : address}
 keywords = ['CLA','LAC','SAC','ADD','SUB','BRZ','BRN', 'BRP','INP', 'DSP', 'MUL', 'DIV', 'STP', 'DEC']
 
 code = ['CLA',
-        'INP I ',
-        'INP J',
-        'LAC I; checking comments',
-        "SUB '=2'",
+        'INP A ',
+        'INP B',
+        'LAC A; checking comments',
+        "SUB '=3'",
         'BRN L2',
         'DSP L1',
         'CLA',
         'BRZ L2',
-        'L1~ DSP J',
+        'L1 ~ DSP B',
         'CLA',
         'BRZ L2',
-        'L2~ STP',
-        'J DEC ',
-        'I DEC 12']
+        'L2 ~ STP',
+        'A DEC ',
+        'B DEC 125']
 
 pass_one_code = []
 
