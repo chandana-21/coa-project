@@ -242,8 +242,8 @@ def pass_one():
 
         get_literal(roline)# works till here 
         location_counter = location_counter + 12
-        address_to_symbols(location_counter)
-
+        
+    address_to_symbols(location_counter)
     return pass_one_code
 
 code = pass_one()
