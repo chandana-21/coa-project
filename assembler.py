@@ -1,7 +1,7 @@
 opc_table = {} # stores opcodes of the program like { opcode : bin_opcode }
 lab_table = {} # stores Label addresses like { label : location_address }
 var_table = {} # stores variables like { variable : [value, location_address] }
-lit_table = {} # stores literals like { literal : address}
+lit_table = {} # stores literals like { literal : [value, location_address]}
 
 keywords = ['CLA','LAC','SAC','ADD','SUB','BRZ','BRN', 'BRP','INP', 'DSP', 'MUL', 'DIV', 'STP', 'DEC']
 
@@ -9,7 +9,7 @@ code = ['CLA',
         'INP A ',
         'INP B',
         'LAC A ; checking comments',
-        "SUB '=3'",
+        "SUB =3",
         'BRN L2',
         'DSP L1',
         'CLA',
@@ -146,7 +146,7 @@ def get_opcode(line):
 
 
 def get_variable(line):
-    value = 0
+    value = 0 # default value of the variable
     # size = 12
     parts = line.upper().split()
     i = parts.count('DEC')
@@ -160,13 +160,11 @@ def get_variable(line):
     if variable.isdigit():
         return None, None #error
     if i==1 and len(parts)==3:
-        print("y")#test
         value = parts[2].strip()
-        print(variable,value)#test
         if not value.isdigit():
             # print("n")#test
             return None, None #error
-    # value = int(value)
+    value = int(value)
     return variable, value#, size   
 
 
@@ -178,7 +176,7 @@ def add_variable(variable, value): #, size
     elif variable in keywords :
         return 2 #error
     else:
-        lab_table[variable] = [value, '0']
+        var_table[variable] = [value, -1]
         return 3
 
 
@@ -189,6 +187,36 @@ def variable_error(num,variable):
         print("Error!",variable, " has been declared as a Variable already!")
     if num==2:
         print("Error!",variable, " is a Reserved Keyword, can't be used as a Variable")
+
+
+def add_literal(literal):
+    if list(lit_table.keys()).count(literal) == 0:
+        parts = literal.split()
+        if len(parts)>1:
+            return 0
+        if len(parts)==1 and literal[1:].isdigit():
+            value = literal[1:]
+            lit_table[literal] = [value,-1]
+
+
+def get_literal(line):
+    c = line.count('=')
+    if c>1:
+        return 0
+    else:
+        i = line.find('=')
+        if i!=-1:
+            literal = line[i:]
+            add_literal(literal)
+
+
+def address_to_symbols(location_counter):
+    for i in lit_table:
+        lit_table[i][1] = location_counter
+        location_counter = location_counter + 12
+    for i in var_table:
+        var_table[i][1] = location_counter
+        location_counter = location_counter + 12
 
 
 def pass_one():
@@ -204,21 +232,26 @@ def pass_one():
             label_error(i,label)
             
         pass_one_code.append(roline)
-        get_opcode(roline) # works till here 
+        get_opcode(roline) 
 
         variable, value = get_variable(roline)
         if variable != None:
-            print("yes",variable,value)#test
+            # print("yes",variable,value)#test
             i = add_variable(variable, value)
             variable_error(i,variable)
-        
+
+        get_literal(roline)# works till here 
+        location_counter = location_counter + 12
+        address_to_symbols(location_counter)
 
     return pass_one_code
 
 code = pass_one()
-# print(code)
-# print(opc_table)
-print(var_table)
+print("********* code after pass one ********* \n",code)
+print("********* opcode table *********\n", opc_table)
+print("********* label table *********\n", lab_table)
+print("********* literal table *********\n", lit_table)
+print("********* variable table *********\n",var_table)
 
 
 
