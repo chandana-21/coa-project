@@ -1,5 +1,5 @@
-opc_table = {} # stores opcodes of the program like { opcode : bin_opcode }
-lab_table = {} # stores Label addresses like { label : location_address }
+opc_table = {} # stores opcodes like { opcode : bin_opcode }
+lab_table = {} # stores labels like { label : location_address }
 var_table = {} # stores variables like { variable : [value, location_address] }
 lit_table = {} # stores literals like { literal : [value, location_address]}
 
