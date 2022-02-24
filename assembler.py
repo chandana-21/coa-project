@@ -240,11 +240,11 @@ def pass_one():
             i = add_variable(variable, value)
             variable_error(i,variable)
 
-        get_literal(roline)# works till here 
+        get_literal(roline)
         location_counter = location_counter + 12
         
     address_to_symbols(location_counter)
-    return pass_one_code
+    return pass_one_code # works till here 
 
 code = pass_one()
 print("********* code after pass one ********* \n",code)
