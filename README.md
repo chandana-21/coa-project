@@ -2,7 +2,7 @@
 # Project Title
 
 **FORMAT OF INSTRUCTION**  
-Each instruction may include four fields:a label,an operation,an operand and a comment.  
+Each instruction may include four fields: a label, an operation, an operand and a comment.  
 Format of instruction:  
 
 `<label> ~ <opcode> <operand> ; <comment>`
