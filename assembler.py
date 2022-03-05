@@ -5,22 +5,26 @@ lit_table = {} # stores literals like { literal : [value, location_address]}
 
 keywords = ['CLA','LAC','SAC','ADD','SUB','BRZ','BRN', 'BRP','INP', 'DSP', 'MUL', 'DIV', 'STP', 'DEC']
 
-code = ['CLA',
-        'INP A ',
-        'INP B',
-        'LAC A ; checking comments',
-        "SUB =3",
-        'BRN L2',
-        'DSP L1',
-        'CLA',
-        'BRZ L2',
-        'L1 ~ DSP B',
-        'CLA',
-        'BRZ L2',
-        'L2 ~ STP',
-        'A DEC ',
-        # 'L2 ~ STP',
-        'B DEC 125']
+# code = ['CLA', #0
+#         'INP A ', #12
+#         'INP B', #24
+#         'LAC A ; checking comments',#36
+#         "SUB =3",  #48 #lit=180
+#         'BRN L2', #60
+#         'DSP L1',#72
+#         'CLA', #84
+#         'BRZ L2',  #96
+#         'L1 ~ DSP B',# 108 
+#         'CLA', #120
+#         'BRZ L2',#132
+#         'L2 ~ STP', #144
+#         'A DEC ', #156 #var=192
+#         # 'L2 ~ STP',
+#         'B DEC 125'] #168 #var=204
+
+f = open("input.txt", "r")
+with open('input.txt') as file:
+    code = file.readlines()
 
 pass_one_code = []
 
