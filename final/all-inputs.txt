@@ -1,0 +1,16 @@
+CLA
+DAD X
+
+CLA X
+ADD Y
+
+ADD X
+ADD Y
+BRN L
+
+ADD X 
+BRN L 
+L~ ADD Y 
+STP
+
+ADD X ; This is to add 'x' to accumulator
