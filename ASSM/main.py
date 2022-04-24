@@ -34,7 +34,7 @@ def check_valid_variable(symbol,line_num):
     except:
         pass
     if (symbol in reserved_opcodes):
-        error_table.append([line_num,"ERROR! opcode already used as a variable, try using a different variable name"])
+        error_table.append([line_num,"ERROR! variable name is an opcode, try using a different variable name"])
         return False
     valid_chars = '_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     flag = 0
