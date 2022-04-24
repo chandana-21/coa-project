@@ -4,7 +4,7 @@ sym_table = {}
 opc_table = []
 error_table = []
 
-with open('inp.txt','r') as file:
+with open('inpt.txt','r') as file:
   asm_file = file.readlines()
 
 def print_sym_table():
@@ -63,11 +63,12 @@ def add_symbol(line, lc, line_num):
         error_table.append([line_num,"ERROR! No symbol found"])
         return
     if (symbol in reserved_opcodes):
-        error_table.append([line_num,"ERROR! opcode used as a label already, try using a different opcode "])
+        error_table.append([line_num,"ERROR! symbol used as a label already, try using a different symbol "])
         return
     if(symbol in sym_table):
-      if type(sym_table[symbol]) != type(5):
-        if(sym_table[symbol][0] == -2):
+      if type(sym_table[symbol]) == type((1,1)):
+        
+        if(sym_table[symbol][0] == 2):
           error_table.append([line_num,"ERROR! Variable " + symbol + " a label already, try using a different variable"])
           return
       else:
@@ -103,7 +104,6 @@ def pass_one(loc_ctr):
     else:
         error_table.append([line_num,"ERROR! " + opcode + " opcode not recognized"])
     line = line[1:]
-    print(line)
     if (opcode in reserved_opcodes):
         if reserved_opcodes[opcode][1] != len(line):
             error_table.append([line_num,"ERROR! " + opcode + " expects " + str(reserved_opcodes[opcode][1]) + " number of arguments " + "but " + str(len(line)) + " given"])
@@ -113,13 +113,13 @@ def pass_one(loc_ctr):
         if(check_valid_variable(var,line_num)==False):
             continue
         if ('BR' in opcode):
-            sym_table[var] = (-1,line_num)
+            sym_table[var] = (1,line_num)
         else:
-            sym_table[var] = (-2,line_num)
+            sym_table[var] = (2,line_num)
       else:
-        if ('BR' in opcode and sym_table[var][0] == -2):
+        if ('BR' in opcode and sym_table[var][0] == 2):
             error_table.append([line_num,"ERROR! Invalid jump location " + var + " since it's already used as a variable"])
-        if('BR' not in opcode and sym_table[var][0] == -1):
+        if('BR' not in opcode and sym_table[var][0] == 1):
             error_table.append([line_num,"ERROR! Invalid use of " + var + ", it has already been used as a jump location"])
 
     line_num += 1
@@ -130,10 +130,10 @@ def pass_one(loc_ctr):
 def get_variables(lc):
   for symbol in sym_table:
     if type(sym_table[symbol]) == type((1,1)):
-      if sym_table[symbol][0] == -2:
+      if sym_table[symbol][0] == 2:
         sym_table[symbol] = lc
         lc += 1
-      elif sym_table[symbol][0] == -1:
+      elif sym_table[symbol][0] == 1:
         error_table.append([sym_table[symbol][1],"ERROR: Label " + symbol  + " used but not defined"])
   return lc
 
@@ -170,7 +170,7 @@ loc_ctr = pass_one(0)
 
 get_variables(loc_ctr)
 if(len(error_table) == 0):
-  with open("out.txt","w+") as ofile:
+  with open("out2.txt","w+") as ofile:
     pass_two(ofile)
   print_sym_table()
   print('================================\n')
