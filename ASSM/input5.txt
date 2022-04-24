@@ -1,0 +1,2 @@
+ADD X ; This is to add 'x' to accumulator
+STP
